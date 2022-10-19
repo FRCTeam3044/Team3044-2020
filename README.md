@@ -1,5 +1,5 @@
 # Team3044-2020
 Repository for the 2020 Season for Team 0xBE4
 
-Public just in case anyone is looking for this but never
-went to a competition and code is unfinished
+This is literally an empty project I'll update it when
+I have the chance.
