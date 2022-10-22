@@ -1,0 +1,81 @@
+package frc.robot;
+
+//import com.playingwithfusion.CANVenom.ControlMode.PositionControl; 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+public class Climb extends RobotSubsystem
+{
+    public static TalonSRX LeadWinch; 
+    public static TalonSRX FollowWinch; 
+    public static TalonSRX Telescope; 
+    
+    public static final int CLIMB_HEIGHT_PRESET=28 * 4096 ;   
+
+    public Climb() 
+    {
+        robotInit();
+    } 
+
+    public void robotInit()
+    {
+        LeadWinch = new TalonSRX ( Integer.parseInt( Robot.RobotConfiguration.getProperty("climb_lead_winch_canid","21")));
+        FollowWinch = new TalonSRX(  Integer.parseInt( Robot.RobotConfiguration.getProperty("climb_follow_winch_canid","22")));
+        Telescope = new TalonSRX ( Integer.parseInt( Robot.RobotConfiguration.getProperty("climb_telescope_canid","23"))); 
+
+    }
+
+    public void teleopInit() {}
+
+    public void teleopPeriodic() {
+
+        SmartDashboard.putNumber("Controller POV", Robot.Driver2.getPOV());
+        if (Robot.mode == "Climb") 
+        {
+            if (Robot.Driver2.getAButtonPressed())
+            {
+
+                Telescope.set(com.ctre.phoenix.motorcontrol.ControlMode.Position, CLIMB_HEIGHT_PRESET); 
+            }
+
+            if (Robot.Driver2.getPOV() == -1) {
+                RunTelescope(0);
+            }
+            if (Robot.Driver2.getPOV() == 0) {
+                RunTelescope(0.5);
+            }
+            if (Robot.Driver2.getPOV() == 180) {
+                RunTelescope(-0.5);
+            }
+            if (Robot.Driver2.getXButtonPressed()) {
+                climbWinch(0.5);
+            }
+            if (Robot.Driver2.getYButtonPressed()) {
+                climbWinch(0);
+            }
+            if (Robot.Driver2.getBButtonPressed()) {
+                climbWinch(-0.5);
+            }
+
+            if (Robot.Driver2.getBackButtonPressed()) 
+            {
+                Robot.mode = "PowerCells";
+            }
+        }
+        else
+        {
+            RunTelescope(0);
+            climbWinch(0);
+        }
+    }
+
+    public void RunTelescope(double power) {
+        Telescope.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, power);
+    }
+
+    public void climbWinch(double power) {
+        LeadWinch.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, power);
+        FollowWinch.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, -(power));  
+    }
+
+}

@@ -22,19 +22,15 @@ public class Robot extends TimedRobot {
   // This file can be edited in-place on the robot with WinSCP 
   // or, copied over w/ SCP. 
   static final String CONFIG_PATH="/etc/robot.conf";
-  static final int TEAM_NUMBER=3044;
-
   public static Properties RobotConfiguration = new Properties(); 
   public static boolean ConfigLoaded = false; 
 
-  public static Auto Auto;
+  
   public static Vision VisionSystem; 
-  public static GripPipeline GripPipeline;
   public static Climb ClimbSystem; 
   public static Drive DriveSystem; 
   public static Sensors SensorSystem; 
   public static PowerCells PowerCellsSystem;  
-  public static String mode="PowerCells"; 
 
   /**
    * This function is run when the robot is first started up and should be
@@ -72,8 +68,6 @@ public class Robot extends TimedRobot {
     Robot.DriveSystem =  new Drive();
     Robot.ClimbSystem =  new Climb();
     Robot.PowerCellsSystem =  new PowerCells();
-    Robot.GripPipeline = new GripPipeline();
-    Robot.Auto = new Auto();
   }
 
   void loadConfiguration() 
@@ -159,7 +153,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-
     Robot.SensorSystem.teleopPeriodic();
     Robot.VisionSystem.teleopPeriodic();
     Robot.DriveSystem.teleopPeriodic();
